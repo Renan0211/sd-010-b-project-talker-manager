@@ -40,6 +40,27 @@ function validateAge(age) {
   return true;
 }
 
+function validateTalkValues(talk) {
+  if (talk === undefined || talk.watchedAt === undefined || talk.rate === undefined) {
+    return { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' }; 
+   }
+  return true;
+}
+
+function validateTalk(talk) {
+  if (validateTalkValues(talk) !== true) return validateTalkValues(talk);
+  const dateRE = /^[0-3]\d\/[0-1]\d\/\d\d\d\d$/;
+  if (!dateRE.test(talk.watchedAt)) {
+    return { message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' };
+  }
+
+  // const rateRe = /^[0-5]$/;
+  if (talk.rate > 5 || talk.rate < 1) {
+    return { message: 'O campo "rate" deve ser um inteiro de 1 à 5' };
+  }
+  return true;
+}
+
 app.get('/talker', (req, res) => {
   const talker = JSON.parse(fs.readFileSync('talker.json'));
   if (talker.length === 0) return res.json([]);
@@ -48,7 +69,7 @@ app.get('/talker', (req, res) => {
 
 app.post('/talker', (req, res) => {
   const { authorization } = req.headers;
-  const { name, age } = req.body;
+  const { name, age, talk } = req.body;
   if (validateToken(authorization) !== true) {
     return res.status(401).json(validateToken(authorization)); 
   }
@@ -58,6 +79,13 @@ app.post('/talker', (req, res) => {
   if (validateAge(age) !== true) {
     return res.status(400).json(validateAge(age));
   }
+  if (validateTalk(talk) !== true) return res.status(400).json(validateTalk(talk));
+  const talkers = JSON.parse(fs.readFileSync('./talker.json'));
+  const lastId = talkers[talkers.length - 1].id;
+  const newTalker = { id: lastId + 1, name, age, talk };
+  talkers.push(newTalker);
+  fs.writeFileSync('./talker.json', JSON.stringify(talkers));
+  return res.status(201).json(newTalker);
 });
 
 app.get('/talker/:id', (req, res) => {
