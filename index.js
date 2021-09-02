@@ -27,6 +27,11 @@ function validateToken(token) {
   if (!tokenRE.test(token)) return 'unvalid token';
 }
 
+function validateName(name) {
+  if (name === undefined || name === '') return 'undefined name';
+  if (name.length < 3) return 'name too short';
+}
+
 app.get('/talker', (req, res) => {
   const talker = JSON.parse(fs.readFileSync('talker.json'));
   if (talker.length === 0) return res.json([]);
@@ -35,12 +40,18 @@ app.get('/talker', (req, res) => {
 
 app.post('/talker', (req, res) => {
   const { authorization } = req.headers;
-  console.log(authorization);
+  const { name } = req.body;
   if (validateToken(authorization) === 'token not found') {
     res.status(401).json({ message: 'Token não encontrado' });
   }
   if (validateToken(authorization) === 'unvalid token') {
     res.status(401).json({ message: 'Token inválido' });
+  }
+  if (validateName(name) === 'undefined name') {
+    return res.status(400).json({ message: 'O campo "name" é obrigatório' });
+  }
+  if (validateName(name) === 'name too short') {
+    return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
   }
 });
 
