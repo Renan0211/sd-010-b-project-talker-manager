@@ -23,13 +23,21 @@ function validatePassword(password) {
 
 function validateToken(token) {
   const tokenRE = /\w{16}/;
-  if (token === undefined) return 'token not found';
-  if (!tokenRE.test(token)) return 'unvalid token';
+  if (token === undefined) return { message: 'Token não encontrado' };
+  if (!tokenRE.test(token)) return { message: 'Token inválido' };
+  return true;
 }
 
 function validateName(name) {
-  if (name === undefined || name === '') return 'undefined name';
-  if (name.length < 3) return 'name too short';
+  if (name === undefined || name === '') return { message: 'O campo "name" é obrigatório' };
+  if (name.length < 3) return { message: 'O "name" deve ter pelo menos 3 caracteres' };
+  return true;
+}
+
+function validateAge(age) {
+  if (age === undefined || age === '') return { message: 'O campo "age" é obrigatório' };
+  if (age < 18) return { message: 'A pessoa palestrante deve ser maior de idade' };
+  return true;
 }
 
 app.get('/talker', (req, res) => {
@@ -40,18 +48,15 @@ app.get('/talker', (req, res) => {
 
 app.post('/talker', (req, res) => {
   const { authorization } = req.headers;
-  const { name } = req.body;
-  if (validateToken(authorization) === 'token not found') {
-    res.status(401).json({ message: 'Token não encontrado' });
+  const { name, age } = req.body;
+  if (validateToken(authorization) !== true) {
+    return res.status(401).json(validateToken(authorization)); 
   }
-  if (validateToken(authorization) === 'unvalid token') {
-    res.status(401).json({ message: 'Token inválido' });
+  if (validateName(name) !== true) {
+    return res.status(400).json(validateName(name));
   }
-  if (validateName(name) === 'undefined name') {
-    return res.status(400).json({ message: 'O campo "name" é obrigatório' });
-  }
-  if (validateName(name) === 'name too short') {
-    return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
+  if (validateAge(age) !== true) {
+    return res.status(400).json(validateAge(age));
   }
 });
 
