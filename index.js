@@ -98,6 +98,27 @@ app.get('/talker/:id', (req, res) => {
   res.status(200).json(selectedTalker);
 });
 
+app.put('/talker/:id', (req, res) => {
+  const { authorization } = req.headers;
+  const { name, age, talk } = req.body;
+  const { id } = req.params;
+  const talkers = JSON.parse(fs.readFileSync('./talker.json'));
+  if (validateToken(authorization) !== true) {
+    return res.status(401).json(validateToken(authorization));
+  }
+  if (validateName(name) !== true) {
+    return res.status(400).json(validateName(name));
+  }
+  if (validateAge(age) !== true) {
+    return res.status(400).json(validateAge(age));
+  }
+  if (validateTalk(talk) !== true) return res.status(400).json(validateTalk(talk));
+  const talkerIndex = talkers.findIndex((t) => t.id === id);
+   talkers[talkerIndex] = { id, name, age, talk };
+   fs.writeFileSync('./talker.json', talkers);
+   return res.status(200).json(talkers[talkerIndex]);
+});
+
 app.post('/login', (req, res) => {
    const { email, password } = req.body;
   if (validateEmail(email) === 'undefined email') {
