@@ -11,13 +11,13 @@ const PORT = '3000';
 
 function validateEmail(email) {
   const validEmailShape = /\b[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}\b/i;
+  if (email === undefined || email === '') return 'undefined email';
   if (!validEmailShape.test(email)) return 'unvalid email format';
-  if (!email || email === '') return 'undefined email';
   return 'valid email';
 }
 
 function validatePassword(password) {
-  if (!password || password === '') return 'undefined password';
+  if (password === undefined || password === '') return 'undefined password';
   if (password.length < 6) return 'password too short';
 } 
 
@@ -45,10 +45,10 @@ app.post('/login', (req, res) => {
     return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
   if (validatePassword(password) === 'password too short') {
-    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
+    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
   if (validatePassword(password) === 'undefined password') {
-    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
   }
   return res.status(200).json({ token: randomToken(16) });
 });
