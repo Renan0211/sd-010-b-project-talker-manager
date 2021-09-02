@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const randomToken = require('random-token');
 
+const talkerPath = './talker.json';
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -80,16 +82,16 @@ app.post('/talker', (req, res) => {
     return res.status(400).json(validateAge(age));
   }
   if (validateTalk(talk) !== true) return res.status(400).json(validateTalk(talk));
-  const talkers = JSON.parse(fs.readFileSync('./talker.json'));
+  const talkers = JSON.parse(fs.readFileSync(talkerPath));
   const lastId = talkers[talkers.length - 1].id;
   const newTalker = { id: lastId + 1, name, age, talk };
   talkers.push(newTalker);
-  fs.writeFileSync('./talker.json', JSON.stringify(talkers));
+  fs.writeFileSync(talkerPath, JSON.stringify(talkers));
   return res.status(201).json(newTalker);
 });
 
 app.get('/talker/:id', (req, res) => {
-  const talker = JSON.parse(fs.readFileSync('talker.json'));
+  const talker = JSON.parse(fs.readFileSync(talkerPath));
   const { id } = req.params;
   const selectedTalker = talker.find((t) => t.id === parseInt(id, 10));
   if (!selectedTalker) {
@@ -102,7 +104,7 @@ app.put('/talker/:id', (req, res) => {
   const { authorization } = req.headers;
   const { name, age, talk } = req.body;
   const { id } = req.params;
-  const talkers = JSON.parse(fs.readFileSync('./talker.json'));
+  const talkers = JSON.parse(fs.readFileSync(talkerPath));
   if (validateToken(authorization) !== true) {
     return res.status(401).json(validateToken(authorization));
   }
@@ -115,8 +117,21 @@ app.put('/talker/:id', (req, res) => {
   if (validateTalk(talk) !== true) return res.status(400).json(validateTalk(talk));
   const talkerIndex = talkers.findIndex((t) => t.id === parseInt(id, 10));
    talkers[talkerIndex] = { id: parseInt(id, 10), name, age, talk };
-   fs.writeFileSync('./talker.json', JSON.stringify(talkers));
+   fs.writeFileSync(talkerPath, JSON.stringify(talkers));
    return res.status(200).json(talkers[talkerIndex]);
+});
+
+app.delete('/talker/:id', (req, res) => {
+  const { authorization } = req.headers;
+  const { id } = req.params;
+  if (validateToken(authorization) !== true) {
+    return res.status(401).json(validateToken(authorization));
+  }
+
+  const talkers = JSON.parse(fs.readFileSync(talkerPath));
+  const newTalkers = talkers.filter((t) => t.id !== parseInt(id, 10));
+  fs.writeFileSync(talkerPath, JSON.stringify(newTalkers));
+  return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 app.post('/login', (req, res) => {
