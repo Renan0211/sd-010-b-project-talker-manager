@@ -10,8 +10,7 @@ const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
 function validateEmail(email) {
-  // eslint-disable-next-line max-len
-  const validEmailShape = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const validEmailShape = /\b[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}\b/i;
   if (!validEmailShape.test(email)) return 'unvalid email format';
   if (!email || email === '') return 'undefined email';
   return 'valid email';
