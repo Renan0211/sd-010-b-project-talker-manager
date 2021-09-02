@@ -21,10 +21,27 @@ function validatePassword(password) {
   if (password.length < 6) return 'password too short';
 } 
 
+function validateToken(token) {
+  const tokenRE = /\w{16}/;
+  if (token === undefined) return 'token not found';
+  if (!tokenRE.test(token)) return 'unvalid token';
+}
+
 app.get('/talker', (req, res) => {
   const talker = JSON.parse(fs.readFileSync('talker.json'));
   if (talker.length === 0) return res.json([]);
   res.json(talker);
+});
+
+app.post('/talker', (req, res) => {
+  const { authorization } = req.headers;
+  console.log(authorization);
+  if (validateToken(authorization) === 'token not found') {
+    res.status(401).json({ message: 'Token não encontrado' });
+  }
+  if (validateToken(authorization) === 'unvalid token') {
+    res.status(401).json({ message: 'Token inválido' });
+  }
 });
 
 app.get('/talker/:id', (req, res) => {
