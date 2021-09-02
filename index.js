@@ -113,9 +113,9 @@ app.put('/talker/:id', (req, res) => {
     return res.status(400).json(validateAge(age));
   }
   if (validateTalk(talk) !== true) return res.status(400).json(validateTalk(talk));
-  const talkerIndex = talkers.findIndex((t) => t.id === id);
-   talkers[talkerIndex] = { id, name, age, talk };
-   fs.writeFileSync('./talker.json', talkers);
+  const talkerIndex = talkers.findIndex((t) => t.id === parseInt(id, 10));
+   talkers[talkerIndex] = { id: parseInt(id, 10), name, age, talk };
+   fs.writeFileSync('./talker.json', JSON.stringify(talkers));
    return res.status(200).json(talkers[talkerIndex]);
 });
 
