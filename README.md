@@ -63,6 +63,8 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
 - [POST /login](#3-post-login)
 - [POST /talker](#4--post-talker)
 - [PUT /talker/:id](#5-put-talkerid)
+- [DELETE /talker/:id](#6-delete-talkerid)
+
 ## 1. `GET` `/talker`
   * O endpoint deve retornar um array com todas as pessoas palestrantes cadastradas. Devendo retornar o `status 200` 
 ## 2. `GET` `/talker/:id`
