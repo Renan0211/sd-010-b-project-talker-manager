@@ -34,7 +34,7 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
 2. Entre no diretório onde o projeto foi clonado:
 
    ```bash
-	cd store-manager
+	cd talker-manager
 	```
 
 3. Instale as dependências:
