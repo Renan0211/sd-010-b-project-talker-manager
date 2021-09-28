@@ -31,11 +31,10 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
 	git clone git@github.com:Renan0211/talker-manager.git
 	```
 
-
 2. Entre no diretório onde o projeto foi clonado:
 
    ```bash
-	cd talker-manager
+	cd store-manager
 	```
 
 3. Instale as dependências:
@@ -49,8 +48,14 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
 	```bash
 	sudo systemctl start mongod
 	```
+5. Inicie a API localmente:
+   ```bash
+	npm start
+   ```
 
-5. Use o postman ou qualquer outra ferramenta que você esteja acostumado para fazer requisições aos endpoints :smile:
+6. Use o postman ou qualquer outra ferramenta que você esteja acostumado para fazer requisições aos endpoints :smile:
+
+
 # Lista de endpoints
 ### 1. `GET` /talker
   * O endpoint deve retornar um array com todas as pessoas palestrantes cadastradas. Devendo retornar o `status 200` 
