@@ -53,13 +53,19 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
 	npm start
    ```
 
-6. Use o postman ou qualquer outra ferramenta que você esteja acostumado para fazer requisições aos endpoints :smile:
-
+6. Use o postman ou qualquer outra ferramenta que você esteja acostumado para fazer requisições aos endpoints :smile: 
+   - (usando a URL http://localhost:3000)
 
 # Lista de endpoints
-### 1. `GET` /talker
+
+- [GET /taker](#1-get-talker)
+- [GET /taker/:id](#2-get-talkerid)
+- [POST /login](#3-post-login)
+- [POST /talker](#4--post-talker)
+- [PUT /talker/:id](#5-put-talkerid)
+## 1. `GET` `/talker`
   * O endpoint deve retornar um array com todas as pessoas palestrantes cadastradas. Devendo retornar o `status 200` 
-### 2. `GET` /talker/:id
+## 2. `GET` `/talker/:id`
 - O endpoint deve retornar uma pessoa palestrante com base no id da rota. Devendo retornar o `status 200` ao fazer uma requisição `/talker/1`, com o seguinte corpo:
 
   ```json
@@ -80,7 +86,7 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
   ```
 
 
-### 3. `POST` /login
+## 3. `POST` `/login`
  - O endpoint deve ser capaz de retornar um token aleatório de 16 caracteres que deverá ser utilizado nas demais requisições.
 
   - O endpoint deverá retornar um código de `status 200` com o token gerado, com o seguinte corpo:
@@ -135,7 +141,7 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
       "message": "O \"password\" deve ter pelo menos 6 caracteres"
     }
     ```
-### 4.  `POST` /talker
+## 4.  `POST` `/talker`
  - O endpoint deve ser capaz de adicionar uma nova pessoa palestrante ao seu arquivo;
 
 - O corpo da requisição deverá ter o seguinte formato:
@@ -250,7 +256,7 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
     }
   }
   ```
-### 5. `PUT` /talker/:id
+## 5. `PUT` `/talker/:id`
 - O endpoint deve ser capaz de editar uma pessoa palestrante com base no id da rota, sem alterar o id registrado.
 
 - O corpo da requisição deverá ter o seguinte formato:
@@ -366,7 +372,7 @@ Este projeto foi desenvolvido por mim enquanto estudava desenvolvimento web na [
   }
   ```
 
-6. `DELETE`/talker/:id
+## 6. `DELETE` `/talker/:id`
 
 - A requisição deve ter o token de autenticação nos headers.
 
